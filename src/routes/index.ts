@@ -9,12 +9,28 @@ import {
   getUser,
   updateUser,
 } from "../controllers/userController";
+import {
+  createInvoice,
+  getDashboardInvoices,
+} from "../controllers/paymentController";
 
 export const companyRoutes = async (server: FastifyInstance) => {
-  server.get<{ Params: { name: string } }>(
-    "/createCompany/:name",
+  server.post<{ Body: { Name: string; Address: string; Strength: number } }>(
+    "/createCompany",
     createCompany
   );
+};
+
+export const paymentRoutes = async (server: FastifyInstance) => {
+  server.post<{
+    Body: {
+      InvoiceNumber: string;
+      TotalAmount: string;
+      PaymentMethod: string;
+      PaymentStatus: string;
+    };
+  }>("/createInvoice", createInvoice);
+  server.get("/getDashboardInvoices", getDashboardInvoices);
 };
 
 export const userRoutes = async (server: FastifyInstance) => {

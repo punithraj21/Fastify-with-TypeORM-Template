@@ -2,7 +2,7 @@ import "reflect-metadata";
 import Fastify, { FastifyInstance } from "fastify";
 
 import { app } from "./src/bootstrap";
-import { companyRoutes, userRoutes } from "./src/routes";
+import { companyRoutes, paymentRoutes, userRoutes } from "./src/routes";
 
 const server: FastifyInstance = Fastify({});
 
@@ -14,6 +14,7 @@ const pong = async (req, reply) => {
   return { pong: req.user.pong };
 };
 
+paymentRoutes(server);
 companyRoutes(server);
 userRoutes(server);
 

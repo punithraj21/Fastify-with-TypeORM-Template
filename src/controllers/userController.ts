@@ -59,7 +59,7 @@ export const createPost = async (req, res) => {
   const categoryRepository = AppDataSource.getRepository(Category);
 
   try {
-    const user = await userRepository.findOne({ where: { id: 34 } });
+    const user = await userRepository.findOne({ where: { id: 47 } });
 
     if (!user) {
       throw new Error("User not found");
@@ -79,7 +79,7 @@ export const createPost = async (req, res) => {
 
     // Fetch the user including the posts, profile and their categories
     const userWithPosts = await userRepository.findOne({
-      where: { id: 34 },
+      where: { id: 47 },
       relations: ["profile", "posts", "posts.categories"],
     });
 

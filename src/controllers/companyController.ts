@@ -9,13 +9,7 @@ export const createCompany = async (req, res) => {
 
   console.log("Inserting a new company into the database...");
 
-  const company = new Company();
-  company.Name = req.params.name;
-  company.Address = "Bangalore";
-  company.Strength = 25;
-
-  await companyRepository.save(company);
-  console.log("Saved a new company with id: " + company.id);
+  const company = await companyRepository.save(req.body);
 
   res.send(company);
 };
