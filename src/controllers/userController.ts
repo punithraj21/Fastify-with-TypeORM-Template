@@ -97,6 +97,58 @@ export const createPost = async (req, res) => {
   }
 };
 
+export const getAllPosts = async (req, res) => {
+  const userId = parseInt(req.params.id, 10);
+
+  const { page, pageSize } = req.body;
+
+  if (isNaN(page) || isNaN(pageSize) || page <= 0 || pageSize <= 0) {
+    res.status(400).send({ error: "Invalid page or pageSize value" });
+    return;
+  }
+
+  async function fetchUserWithPosts(
+    userId: number,
+    page: number,
+    pageSize: number
+  ) {
+    const userRepository = AppDataSource.getRepository(User);
+    const postRepository = AppDataSource.getRepository(Post);
+
+    const user = await userRepository.findOne({
+      where: { id: userId },
+      relations: ["profile"],
+    });
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    const skip = (page - 1) * pageSize;
+
+    const [posts, totalPosts] = await postRepository.findAndCount({
+      where: { user: { id: userId } },
+      relations: ["categories"],
+      skip: skip,
+      take: pageSize,
+    });
+
+    user.posts = posts;
+
+    return {
+      user,
+      totalPosts,
+      currentPage: page,
+      totalPages: Math.ceil(totalPosts / pageSize),
+    };
+  }
+
+  const { user, totalPosts, currentPage, totalPages } =
+    await fetchUserWithPosts(req.params.id, page, pageSize);
+
+  res.send({ user, totalPosts, currentPage, totalPages });
+};
+
 export const getUser = async (req, res) => {
   const userRepository = AppDataSource.getRepository(User);
 
