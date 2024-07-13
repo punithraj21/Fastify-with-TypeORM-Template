@@ -16,10 +16,9 @@ import {
 } from "../controllers/paymentController";
 
 export const companyRoutes = async (server: FastifyInstance) => {
-  server.post<{ Body: { Name: string; Address: string; Strength: number } }>(
-    "/createCompany",
-    createCompany
-  );
+  server.post("/createCompany", async (request, reply) => {
+    await createCompany(server, request, reply);
+  });
 };
 
 export const paymentRoutes = async (server: FastifyInstance) => {
@@ -44,12 +43,17 @@ export const userRoutes = async (server: FastifyInstance) => {
     Body: { page: number; pageSize: number };
   }>("/getAllPosts/:id", getAllPosts);
 
-  server.post<{ Body: { firstName: string; lastName: string; age: number } }>(
-    "/createUser",
-    createUser
-  );
+  server.post<{
+    Body: {
+      firstName: string;
+      lastName: string;
+      age: number;
+      bio: string;
+      avatar: string;
+    };
+  }>("/createUser", createUser);
 
-  server.post<{ Body: { title: string; content: string } }>(
+  server.post<{ Body: { title: string; content: string; userId: number } }>(
     "/createPost",
     createPost
   );

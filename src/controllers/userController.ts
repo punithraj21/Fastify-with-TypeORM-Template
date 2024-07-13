@@ -10,8 +10,8 @@ export const createUser = async (req, res) => {
 
   try {
     const newProfile = await profileRepository.save({
-      bio: "Software Engineer",
-      avatar: "https://avatars.githubusercontent.com/u/64120319?v=4",
+      bio: req.body.bio,
+      avatar: req.body.avatar,
     });
 
     const savedUser = await userRepository.save({
@@ -59,7 +59,9 @@ export const createPost = async (req, res) => {
   const categoryRepository = AppDataSource.getRepository(Category);
 
   try {
-    const user = await userRepository.findOne({ where: { id: 47 } });
+    const user = await userRepository.findOne({
+      where: { id: Number(req.body.userId) },
+    });
 
     if (!user) {
       throw new Error("User not found");
@@ -79,7 +81,7 @@ export const createPost = async (req, res) => {
 
     // Fetch the user including the posts, profile and their categories
     const userWithPosts = await userRepository.findOne({
-      where: { id: 47 },
+      where: { id: Number(req.body.userId) },
       relations: ["profile", "posts", "posts.categories"],
     });
 
@@ -173,7 +175,15 @@ export const updateUser = async (req, res) => {
     req.body
   );
 
-  res.send(users);
+  const updatedUser = await userRepository.findOneBy({
+    id: Number(req.params.id),
+  });
+
+  res.send({
+    success: true,
+    message: "user Updated Successfully.",
+    data: updatedUser,
+  });
 };
 
 export const deleteUser = async (req, res) => {
