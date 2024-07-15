@@ -6,6 +6,9 @@ import { Server as SocketIOServer } from "socket.io";
 
 import { app } from "./src/bootstrap";
 import { companyRoutes, paymentRoutes, userRoutes } from "./src/routes";
+import "./workers/bullWorker";
+import "./workers/rabbitWorker";
+import "./workers/kafkaConsumer";
 
 const fastify: FastifyInstance = Fastify({});
 
@@ -47,7 +50,6 @@ fastify.ready((err) => {
 
     let count = 0;
     socket.on("customEvent", (data) => {
-      console.log("data: ", data);
       setTimeout(() => {
         socket.emit(
           "messageFromServer1",

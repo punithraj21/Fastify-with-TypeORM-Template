@@ -14,8 +14,11 @@
   },
   "dependencies": {
     "@fastify/cors": "^9.0.1",
+    "amqplib": "^0.10.4",
+    "bullmq": "^5.8.7",
     "fastify": "^4.28.0",
     "fastify-socket.io": "^5.0.0",
+    "kafkajs": "^2.2.4",
     "pg": "^8.4.0",
     "reflect-metadata": "^0.1.13",
     "socket.io": "^4.7.5",
